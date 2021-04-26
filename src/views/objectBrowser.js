@@ -104,6 +104,25 @@ module.exports = class objectBrowserProvider {
           //Running from command
           console.log(this);
         }
+      }),
+      vscode.commands.registerCommand(`code-for-ibmi.Debug`, async (node) => {
+        const config = instance.getConfig();
+        let debugPath = config.debugPath;
+        if (debugPath == '') {
+         vscode.window.showErrorMessage("Debug path is undefined.");
+        } else {
+        let exec = require("child_process").exec;
+        
+        
+        let cmd = "java -cp " + debugPath.trim() + "jt400.jar;"+ debugPath.trim() +"tes.jar utilities.DebugMgr";
+        exec(cmd, (error, stdout, stderr) => {
+          if (stderr) {
+            vscode.window.showErrorMessage(stderr);
+          } else {
+            vscode.window.showInformationMessage("Debugging finished");
+          }
+        });
+        }
       })
     )
   }

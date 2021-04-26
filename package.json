@@ -65,7 +65,8 @@
 		"onCommand:code-for-ibmi.refreshDatabaseBrowser",
 		"onCommand:code-for-ibmi.addSchemaToDatabaseBrowser",
 		"onCommand:code-for-ibmi.removeSchemaFromDatabaseBrowser",
-		"onCommand:code-for-ibmi.runEditorStatement"
+		"onCommand:code-for-ibmi.runEditorStatement",
+		"onCommand:code-for-ibmi.Debug"
 	],
 	"main": "./dist/extension",
 	"contributes": {
@@ -162,6 +163,11 @@
 								"type": "boolean",
 								"default": true,
 								"description": "Must be enabled to make the use of db2util and is enabled by default. If you find db2util isn't working for some reason, disable this. If this config is changed, you must reconnect to the system."
+							},
+							"debugPath": {
+								"type": "string",
+								"default": "",
+								"description": "Debug directory is the working directory where tar.jar and jt400.jar must be present to enable debugging; Example C:/Debug/ "
 							}
 						}
 					}
@@ -373,7 +379,9 @@
 						},
 						{
 							"type": "streamfile",
-							"extensions": ["rpgle"],
+							"extensions": [
+								"rpgle"
+							],
 							"name": "Create Bound RPG Program (CRTBNDRPG) with inputs",
 							"command": "CRTBNDRPG PGM(${buildlib|Build library|&BUILDLIB}/${objectname|Object Name|&NAME}) SRCSTMF('${sourcePath|Source path|&FULLPATH}') OPTION(*EVENTF) DBGVIEW(*SOURCE) TGTRLS(*CURRENT)"
 						},
@@ -664,6 +672,11 @@
 				"title": "Run selected statement",
 				"category": "IBM i",
 				"icon": "$(database)"
+			},
+			{
+				"command": "code-for-ibmi.Debug",
+				"title": "Debug Manager",
+				"category": "IBM i"
 			}
 		],
 		"keybindings": [
@@ -676,6 +689,11 @@
 				"command": "code-for-ibmi.runEditorStatement",
 				"key": "ctrl+r",
 				"mac": "cmd+r"
+			},
+			{
+				"command": "code-for-ibmi.Debug",
+				"key": "ctrl+d",
+				"mac": "cmd+d"
 			}
 		],
 		"viewsContainers": {
@@ -772,6 +790,11 @@
 				},
 				{
 					"command": "code-for-ibmi.createSourceFile",
+					"group": "navigation",
+					"when": "view == objectBrowser"
+				},
+				{
+					"command": "code-for-ibmi.Debug",
 					"group": "navigation",
 					"when": "view == objectBrowser"
 				},
@@ -882,6 +905,11 @@
 				},
 				{
 					"command": "code-for-ibmi.createSourceFile",
+					"when": "view == objectBrowser && viewItem == library",
+					"group": "1_LibActions@2"
+				},
+				{
+					"command": "code-for-ibmi.Debug",
 					"when": "view == objectBrowser && viewItem == library",
 					"group": "1_LibActions@1"
 				},
