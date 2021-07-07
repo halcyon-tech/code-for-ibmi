@@ -46,7 +46,7 @@ module.exports = class Configuration {
   }
 
   /**
-   * Get a host config prop
+   * Get a config prop for current connection
    * @param {string} key 
    */
   get(key) {
@@ -59,7 +59,7 @@ module.exports = class Configuration {
   }
 
   /**
-   * Update configuration prop
+   * Update configuration prop for current connection
    * @param {string} key 
    * @param {any} value 
    */
@@ -78,7 +78,7 @@ module.exports = class Configuration {
   }
 
   /**
-   * Update many values
+   * Update many values for current connection
    * @param {{[NAME: string]: any}} props 
    */
   async setMany(props) {
@@ -95,16 +95,6 @@ module.exports = class Configuration {
 
       await globalData.update(`connectionSettings`, connections, vscode.ConfigurationTarget.Global);
     }
-  }
-
-  /**
-   * Set global extension config
-   * @param {string} key 
-   * @param {any} value 
-   */
-  static setGlobal(key, value) {
-    const globalData = vscode.workspace.getConfiguration(`code-for-ibmi`);
-    return globalData.update(key, value, vscode.ConfigurationTarget.Global);
   }
 
   /** Reload props from vscode settings */
@@ -147,10 +137,31 @@ module.exports = class Configuration {
 
   /**
    * Returns variable not specific to a host (e.g. a global config)
+   * Checks in workspace config first, and then global config
    * @param {string} prop 
    */
   static get(prop) {
     const globalData = vscode.workspace.getConfiguration(`code-for-ibmi`);
     return globalData.get(prop);
+  }
+
+  /**
+   * Set global extension config
+   * @param {string} key 
+   * @param {any} value 
+   */
+  static setGlobal(key, value) {
+    const globalData = vscode.workspace.getConfiguration(`code-for-ibmi`);
+    return globalData.update(key, value, vscode.ConfigurationTarget.Global);
+  }
+
+  /**
+   * Set workspace extension config
+   * @param {string} key 
+   * @param {any} value 
+   */
+  static setWorkspace(key, value) {
+    const globalData = vscode.workspace.getConfiguration(`code-for-ibmi`);
+    return globalData.update(key, value, vscode.ConfigurationTarget.Workspace);
   }
 }
